@@ -37,9 +37,12 @@ repos:
         args:
           - --msg-filename
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: 3.2.1
+    rev: 3.5.0
     hooks:
       - id: editorconfig-checker
+        # https://github.com/editorconfig-checker/editorconfig-checker/issues/505
+        args:
+          - -disable-charset
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
     rev: 3.0.0
     hooks:
@@ -50,7 +53,7 @@ repos:
         exclude_types:
           - zsh
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.7
+    rev: v1.7.9
     hooks:
       - id: actionlint
   - repo: https://github.com/adrienverge/yamllint
@@ -58,21 +61,21 @@ repos:
     hooks:
       - id: yamllint
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.22
+    rev: 1.0.0
     hooks:
       - id: mdformat
         additional_dependencies:
           - mdformat-pyproject
           - mdformat-gfm
-          - mdformat-myst
+          # - mdformat-myst
           - mdformat-toc
           - mdformat-deflist
-          # - mdformat-beautysh
+          - mdformat-beautysh
           - mdformat-ruff
           - mdformat-config
           - mdformat-web
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.18.1
+    rev: v0.19.1
     hooks:
       - id: markdownlint-cli2
         additional_dependencies:

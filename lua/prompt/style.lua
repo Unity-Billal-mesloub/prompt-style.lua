@@ -124,7 +124,7 @@ local function get_os()
     if os.getenv("PREFIX") == "/data/data/com.termux/files/usr" then
         return "android"
     end
-    local binary_format = package.cpath:match('([^.]+)$'):gsub(";$", "")
+    local binary_format = package.cpath:match('([^.]+);?$')
     if binary_format == "so" then
         return get_distribution()
     elseif binary_format == "dll" then
