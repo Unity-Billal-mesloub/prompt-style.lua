@@ -20,6 +20,7 @@ dependencies = {
     "lua >= 5.1",
     "warna",
     "argparse",
+    "platformdirs",
     "luafilesystem",
     "luaprompt"
 }

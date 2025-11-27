@@ -1,13 +1,12 @@
 ---prompt style.
 local os = require "os"
-local table = require "table"
-local lfs = require"lfs"
+
+local lfs = require "lfs"
+local uv = require "platformdirs.uv"
 local warna = require "warna"
 warna.options.level = 3
 local ansicolors = warna.format
 local prompt = require "prompt"
----@diagnostic disable: deprecated
-if table.unpack == nil then table.unpack = unpack end
 
 ---wakatime
 ---@param cmd string | nil
@@ -121,15 +120,15 @@ end
 ---get os
 ---@return string
 local function get_os()
-    if os.getenv("PREFIX") == "/data/data/com.termux/files/usr" then
+    if os.getenv("ANDROID_DATA") == "/data" and os.getenv("ANDROID_ROOT") == "/system" then
         return "android"
     end
-    local binary_format = package.cpath:match('([^.]+);?$')
-    if binary_format == "so" then
+    local sysname = uv.os_uname().sysname:lower()
+    if sysname:find('linux') or sysname:find('unix') then
         return get_distribution()
-    elseif binary_format == "dll" then
+    elseif sysname:find('windows') or sysname:find('mingw') then
         return "windows"
-    elseif binary_format == "dylib" then
+    elseif sysname:find('macos') then
         return "macos"
     end
     return "unknown"
@@ -219,11 +218,11 @@ end
 local function generate_ps1(char, sections)
     char = char or "❯ "
     sections = sections or {
-        ---@diagnostic disable: missing-parameter
-        { "",      "",       wakatime },
-        { "black", "yellow", get_icon() }, { "blue", "black", get_version() },
-        { "white", "blue", get_cwd }, { "black", "white", get_time }
-    }
+            ---@diagnostic disable: missing-parameter
+            { "",      "",       wakatime },
+            { "black", "yellow", get_icon() }, { "blue", "black", get_version() },
+            { "white", "blue", get_cwd }, { "black", "white", get_time }
+        }
     local sep = ""
     local format = " %s "
     return function()
@@ -237,7 +236,9 @@ local function generate_ps1(char, sections)
                     sep = v
                 end
             else
-                local fg, bg, text = table.unpack(v)
+                local fg = v[1]
+                local bg = v[2]
+                local text = v[3]
                 if type(text) == "function" then text = text() end
                 if text ~= "" then
                     text = format:format(text)

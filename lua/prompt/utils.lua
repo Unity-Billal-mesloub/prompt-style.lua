@@ -1,5 +1,6 @@
 ---prompt utils.
 local argparse = require "argparse"
+local PlatformDirs = require "platformdirs".PlatformDirs
 local prompt = require "prompt"
 local style = require "prompt.style"
 local M = {}
@@ -223,8 +224,7 @@ end
 ---source configs
 ---@param configs string[] | nil
 function M.source_configs(configs)
-    configs = configs or { os.getenv('HOME') .. '/.luaprc.lua',
-            os.getenv('HOME') .. '/.config/luaprc.lua' }
+    configs = configs or { PlatformDirs { appname = "luaprc.lua" }:user_config_dir() }
     for _, name in ipairs(configs) do
         local f = io.open(name, "r")
         if f ~= nil then
