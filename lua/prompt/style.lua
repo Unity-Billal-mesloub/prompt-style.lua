@@ -2,7 +2,7 @@
 local os = require "os"
 
 local lfs = require "lfs"
-local uv = require "platformdirs.uv"
+local uv = require "vim.uv"
 local warna = require "warna"
 warna.options.level = 3
 local ansicolors = warna.format
